@@ -74,6 +74,19 @@ void test_incore_find_and_free(){
     CTEST_ASSERT(inode3->ref_count == 0, "checking incore_find_free ref_count value");
 }
 
+void test_read_inode(){
+    struct inode in;
+    read_inode(&in, 0);
+    CTEST_ASSERT(in.size == 0, "checking read_inode size value");
+}
+
+void test_write_inode(){
+    struct inode in;
+    in.size = 10;
+    write_inode(&in);
+    CTEST_ASSERT(in.size == 10, "checking write_inode size value");
+}
+
 int main(){
     CTEST_VERBOSE(1);
     
@@ -85,6 +98,8 @@ int main(){
     test_ialloc();
     test_alloc();
     test_incore_find_and_free();
+    test_read_inode();
+    test_write_inode();
 
     CTEST_RESULTS();
     CTEST_EXIT();
