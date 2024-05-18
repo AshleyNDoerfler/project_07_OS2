@@ -24,7 +24,10 @@ free.0: free.c free.h
 inode.o: inode.c inode.h
 	$(CC) $(CCOPTS) -c $< -o $@
 
-libvvsfs.a: block.o image.o free.o inode.o
+pack.o: pack.c pack.h
+	$(CC) $(CCOPTS) -c $< -o $@
+
+libvvsfs.a: block.o image.o free.o inode.o pack.o
 	ar rcs $@ $^
 
 clean:
