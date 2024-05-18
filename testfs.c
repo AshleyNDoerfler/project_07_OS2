@@ -75,16 +75,31 @@ void test_incore_find_and_free(){
 }
 
 void test_read_inode(){
-    struct inode in;
-    read_inode(&in, 0);
-    CTEST_ASSERT(in.size == 0, "checking read_inode size value");
+    // reset incore
+    incore_free_all();
+
+    // find free inode in incore
+    struct inode *inode = incore_find_free();
+
+    // read inode
+    read_inode(inode, 10);
+    CTEST_ASSERT(inode->size == 0, "checking read_inode size value");
 }
 
 void test_write_inode(){
-    struct inode in;
-    in.size = 10;
-    write_inode(&in);
-    CTEST_ASSERT(in.size == 10, "checking write_inode size value");
+    // reset incore
+    incore_free_all();
+
+    // find free inode in incore
+    struct inode *inode = incore_find_free();
+
+    // write inode
+    inode->size = 10;
+    write_inode(inode);
+
+    // read inode
+    read_inode(inode, 10);
+    CTEST_ASSERT(inode->size == 10, "checking write_inode size value");
 }
 
 int main(){
