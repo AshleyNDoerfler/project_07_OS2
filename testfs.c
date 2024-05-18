@@ -47,6 +47,33 @@ void test_alloc(){
     CTEST_ASSERT(alloc() != -1, "checking alloc return value");
 }
 
+void test_incore_find_and_free(){
+    // reset incore
+    incore_free_all();
+
+    // find free inode in incore
+    struct inode *inode = incore_find_free();
+    CTEST_ASSERT(inode != NULL, "checking incore_find_free return value");
+    CTEST_ASSERT(inode->ref_count == 0, "checking incore_find_free ref_count value");
+
+    // allocate inode
+    inode->inode_num = 10;    // set inode number (arbitrary value)
+    inode->ref_count = 1;     // simulate inode in use
+
+    // find inode in incore by inode number
+    struct inode *inode2 = incore_find(10);
+    CTEST_ASSERT(inode2 != NULL, "checking incore_find return value");
+    CTEST_ASSERT(inode2->inode_num == 10, "checking incore_find inode_num value match");
+
+    // free all incore
+    incore_free_all();
+
+    // find free inode in incore
+    struct inode *inode3 = incore_find_free();
+    CTEST_ASSERT(inode3 != NULL, "checking incore_find_free return value");
+    CTEST_ASSERT(inode3->ref_count == 0, "checking incore_find_free ref_count value");
+}
+
 int main(){
     CTEST_VERBOSE(1);
     
@@ -57,6 +84,7 @@ int main(){
     test_find_free();
     test_ialloc();
     test_alloc();
+    test_incore_find_and_free();
 
     CTEST_RESULTS();
     CTEST_EXIT();
