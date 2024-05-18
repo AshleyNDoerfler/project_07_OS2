@@ -21,23 +21,23 @@ Run: `./main`
     - `image_open`: Opens a image file given a file name.
     - `image_close`: Closes the file image.
 ### testfs.c
-    - _test_image_open_: tests _image.c_ image_open function.
-    - _test_image_open_: tests _image.c_ image_close function.
-    - _test_block_bread_: tests bread.
-    - _test_block_bwrite_: tests bwrite.
+    - test_image_open: tests _image.c_ image_open function.
+    - test_image_open: tests _image.c_ image_close function.
+    - test_block_bread: tests bread.
+    - test_block_bwrite: tests bwrite.
 ### free.c
-    - _set_free_: Sets a bit to free (0).
-    - _find_free_: Finds the first free fit.
+    - set_free: Sets a bit to free (0).
+    - find_free: Finds the first free fit.
 ### inode.c
-    - _ialloc_: Allocates space for the inode block.
-    - _incore_find_free_: Finds the first free in-core  inode in the incore array and returns a pointer to it.
-    - _incore_find_: Finds an in-core inode recod in the incore aaray by the inode number.
-    - _incore_free_all_:Sets the ref_count to all in-core nodes to 0.
+    - ialloc: Allocates space for the inode block.
+    - incore_find_free: Finds the first free in-core  inode in the incore array and returns a pointer to it.
+    - incore_find: Finds an in-core inode recod in the incore aaray by the inode number.
+    - incore_free_all:Sets the ref_count to all in-core nodes to 0.
 ### pack.c
-    - _read_u_32_: Reads an unsigned 32-bit integer from a buffer.p
-    - _read_u16_: Reads an unsigned 16-bit integer from a buffer.
-    - _read_u8_:  Reads an unsigned 8-bit integer from a buffer.
-    - _write_u32_: Writes an unsigned 32-bit integer to a buffer.
-    - _write_u16_: Writes an unsigned 16-bit integer to a buffer.
-    - _write_u8_: Writes an unsigned 8-bit integer to a buffer.
+    - read_u_32: Reads an unsigned 32-bit integer from a buffer.p
+    - read_u16: Reads an unsigned 16-bit integer from a buffer.
+    - read_u8:  Reads an unsigned 8-bit integer from a buffer.
+    - write_u32: Writes an unsigned 32-bit integer to a buffer.
+    - write_u16: Writes an unsigned 16-bit integer to a buffer.
+    - write_u8: Writes an unsigned 8-bit integer to a buffer.
     
