@@ -43,12 +43,13 @@ void incore_free_all(void) {
     }
 }
 
-int block_offest(int inode_num){
+int block_offset(int inode_num){
     int block_num = inode_num / INODES_PER_BLOCK + INODE_FIRST_BLOCK;
     int block_offset = inode_num % INODES_PER_BLOCK;
     int block_offset_bytes = block_offset * INODE_SIZE;
 
-    return block_num, block_offset_bytes;
+    int result[2] = {block_num, block_offset_bytes};
+    return result;
 }
 
 void read_inode(struct inode *in, int inode_num){
