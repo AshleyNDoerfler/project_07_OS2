@@ -49,9 +49,17 @@ void read_inode(struct inode *in, int inode_num){
     int block_offset = inode_num % INODES_PER_BLOCK;
     int block_offset_bytes = block_offset * INODE_SIZE;
     
+    // read block
     bread(block_num, block);
-
-    struct inode *inode = read_u32(block + block_offset_bytes);
+    // unpack into inode
+    in->size = read_u32(block + block_offset_bytes);
+    in->owner_id = read_u16(block + block_offset_bytes + 4);
+    in->permissions = read_u8(block + block_offset_bytes + 6);
+    in->flags = read_u8(block + block_offset_bytes + 7);
+    in->link_count = read_u8(block + block_offset_bytes + 8);
+    for (int i = 0; i < INODE_PTR_COUNT; i++) {
+        in->block_ptr[i] = read_u16(block + block_offset_bytes + 9 + i * 2);
+    }
 }
 
 void write_inode(struct inode *in){
@@ -63,6 +71,14 @@ void write_inode(struct inode *in){
 
     bread(block_num, block);
 
-    write_u8(block + block_offset_bytes, in);
+    write_u32(block + block_offset_bytes, in->size);
+    write_u16(block + block_offset_bytes + 4, in->owner_id);
+    write_u8(block + block_offset_bytes + 6, in->permissions);
+    write_u8(block + block_offset_bytes + 7, in->flags);
+    write_u8(block + block_offset_bytes, in->link_count);
+    for (int i = 0; i < INODE_PTR_COUNT; i++) {
+        write_u16(block + block_offset_bytes + 9 + i * 2, in->block_ptr[i]);
+    }
+
     bwrite(block_num, block);
 }
