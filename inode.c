@@ -1,6 +1,7 @@
 #include "inode.h"
 #include "free.h"
 #include "block.h"
+#include "pack.h"
 #include <stdio.h>
 
 static struct inode incore[MAX_SYSTEM_FILES] = {0};
@@ -40,4 +41,33 @@ void incore_free_all(void) {
     for (int i = 0; i < MAX_SYSTEM_FILES; i++) {
         incore[i].ref_count = 0;
     }
+}
+
+int block_offest(int inode_num){
+    int block_num = inode_num / INODES_PER_BLOCK + INODE_FIRST_BLOCK;
+    int block_offset = inode_num % INODES_PER_BLOCK;
+    int block_offset_bytes = block_offset * INODE_SIZE;
+
+    return block_num, block_offset_bytes;
+}
+
+void read_inode(struct inode *in, int inode_num){
+    unsigned char block[BLOCK_SIZE];
+    int block_num, block_offset_bytes;
+    block_num, block_offset_bytes = block_offset(inode_num);
+    
+    bread(block_num, block);
+
+    struct inode *inode = read_u32(block + block_offset_bytes);
+}
+
+void write_inode(struct inode *in){
+    unsigned char block[BLOCK_SIZE];
+    int block_num, block_offset_bytes;
+    block_num, block_offset_bytes = block_offset(in->inode_num);
+    
+    bread(block_num, block);
+
+    write_u8(block + block_offset_bytes, in);
+    bwrite(block_num, block);
 }
