@@ -40,7 +40,19 @@ void test_find_free(){
 }
 
 void test_ialloc(){
-    CTEST_ASSERT(ialloc() != -1, "checking ialloc return value");
+    // reset incore
+    incore_free_all();
+
+    // allocate inode
+    struct inode *inode = ialloc();
+    CTEST_ASSERT(inode != NULL, "checking ialloc return value");
+    CTEST_ASSERT(inode->size == 0, "checking ialloc size value");
+    CTEST_ASSERT(inode->owner_id == 0, "checking ialloc owner_id value");
+    CTEST_ASSERT(inode->permissions == 0, "checking ialloc permissions value");
+    CTEST_ASSERT(inode->flags == 0, "checking ialloc flags value");
+    CTEST_ASSERT(inode->link_count == 0, "checking ialloc link_count value");
+    CTEST_ASSERT(inode->ref_count == 1, "checking ialloc ref_count value");
+    CTEST_ASSERT(inode->block_ptr[0] == 0, "checking ialloc block_ptr value");
 }
 
 void test_alloc(){
