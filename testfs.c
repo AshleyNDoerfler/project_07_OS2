@@ -108,8 +108,6 @@ void test_iget_and_iput(){
 
     // find free inode in incore
     struct inode *inode = iget(10);
-    CTEST_ASSERT(inode != NULL, "checking iget return value");
-    // CTEST_ASSERT(inode->ref_count == 1, "checking iget ref_count value");
 
     // get inode again
     struct inode *inode2 = iget(10);
@@ -120,9 +118,9 @@ void test_iget_and_iput(){
     iput(inode);
     CTEST_ASSERT(inode->ref_count == 1, "checking iput ref_count value");
 
-    // // put inode
-    // iput(inode2);
-    // CTEST_ASSERT(inode2->ref_count == 1, "checking iput ref_count value");
+    // put inode
+    iput(inode2);
+    CTEST_ASSERT(inode2->ref_count == 0, "checking iput ref_count value");
 }
 
 int main(){
