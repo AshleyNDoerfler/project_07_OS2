@@ -17,6 +17,29 @@ int ialloc(void) {
     return inode_num;
 }
 
+struct inode *iget(int inode_num){
+    struct inode *in = incore_find(inode_num);
+    if (in == NULL) {               // if inode not found in incore
+        in = incore_find_free();    // find free inode in incore
+        if (in == NULL) {           // if no free inode in incore
+            return NULL;            // return NULL
+        }
+        in->inode_num = inode_num;  // set inode number
+        in->ref_count = 1;          // set ref_count to 1
+        read_inode(in, inode_num);  // read inode
+    } else {                        // if inode found in incore
+        in->ref_count++;            // increment ref_count
+    }
+    return in;                      // return inode
+}
+
+void iput(struct inode *in){
+    in->ref_count--;            // decrement ref_count
+    if (in->ref_count == 0) {   // if ref_count is 0
+        write_inode(in);        // write inode to
+    }
+}
+
 struct inode *incore_find_free(void) {
     // find free inode in incore
     for (int i = 0; i < MAX_SYSTEM_FILES; i++) {
