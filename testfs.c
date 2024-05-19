@@ -102,6 +102,29 @@ void test_write_inode(){
     CTEST_ASSERT(inode->size == 10, "checking write_inode size value");
 }
 
+void test_iget_and_iput(){
+    // reset incore
+    incore_free_all();
+
+    // find free inode in incore
+    struct inode *inode = iget(10);
+    CTEST_ASSERT(inode != NULL, "checking iget return value");
+    // CTEST_ASSERT(inode->ref_count == 1, "checking iget ref_count value");
+
+    // get inode again
+    struct inode *inode2 = iget(10);
+    CTEST_ASSERT(inode2 != NULL, "checking iget return value");
+    CTEST_ASSERT(inode2->ref_count == 2, "checking iget ref_count value");
+
+    // put inode
+    iput(inode);
+    CTEST_ASSERT(inode->ref_count == 1, "checking iput ref_count value");
+
+    // // put inode
+    // iput(inode2);
+    // CTEST_ASSERT(inode2->ref_count == 1, "checking iput ref_count value");
+}
+
 int main(){
     CTEST_VERBOSE(1);
     
@@ -115,6 +138,7 @@ int main(){
     test_incore_find_and_free();
     test_read_inode();
     test_write_inode();
+    test_iget_and_iput();
 
     CTEST_RESULTS();
     CTEST_EXIT();
